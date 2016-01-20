@@ -1,0 +1,7 @@
+---
+
+- name: enable ucarp
+  service: name="{{ net_ucarp_service_name }}" state="started" enabled="yes"
+
+- name: restart ucarp
+  service: name="{{ net_ucarp_service_name }}" state="restarted"

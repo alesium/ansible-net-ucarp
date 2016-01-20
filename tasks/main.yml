@@ -1,0 +1,54 @@
+---
+
+- name: install required packages
+  pkgin: name="{{ item }}" state="present"
+  ignore_errors: yes
+  with_items: "{{ net_ucarp_packages }}"
+  tags:
+    - ucarp
+    - install
+
+- name: copy ucarp configuration
+  template: src="{{ net_ucarp_config_file_src }}" dest="{{ net_ucarp_config_file_dest }}" backup="yes" owner="root" group="root" mode="0644"
+  notify: restart ucarp
+  tags:
+    - ucarp
+    - update
+
+- name: create if script directory
+  file: dest="{{ net_ucarp_vip_script_location }}" mode="0755" owner="root" group="root" state="directory"
+  tags:
+    - ucarp
+    - install
+
+- name: copy if-* scripts
+  copy: src="{{ item }}" dest="{{ net_ucarp_vip_script_location }}" mode="0755" owner="root" group="root"
+  with_items:
+    - "{{ net_ucarp_vip_up_exec_file_src }}"
+    - "{{ net_ucarp_vip_down_exec_file_src }}"
+  tags:
+    - ucarp
+    - update
+
+- name: copy ucarp-svc
+  copy: src="ucarp-svc" dest="{{ net_ucarp_SmartOS_service_svc_file }}" backup="no" owner="root" group="root" mode="0755"
+  when: ansible_distribution == "SmartOS"
+  tags:
+    - ucarp
+    - install
+
+- name: copy ucarp smf
+  template: src="ucarp.xml.j2" dest="{{ net_ucarp_SmartOS_service_smf_file }}" backup="no" owner="root" group="root" mode="0644"
+  notify: enable ucarp
+  when: ansible_distribution == "SmartOS"
+  tags:
+    - ucarp
+    - install
+
+- name: import ucarp smf
+  shell: "svccfg import {{ net_ucarp_SmartOS_service_smf_file }}"
+  notify: enable ucarp
+  when: ansible_distribution == "SmartOS"
+  tags:
+    - ucarp
+    - install
