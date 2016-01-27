@@ -1,0 +1,56 @@
+#!/bin/bash
+exec 2> /dev/null
+IFCONFIG="/usr/sbin/ifconfig"
+function get_interface_status()
+{
+    iface=$1
+    $IFCONFIG $iface >/dev/null 2>&1
+    if [ $? == 1 ]; then
+        echo 255
+        exit
+    fi
+    $IFCONFIG $iface | grep UP >/dev/null 2>&1
+    if [ $? == 0 ]; then
+        # interface is up
+        echo 0
+    else
+        echo 1
+    fi
+}
+
+function plumb_interface()
+{
+    iface=$1
+    $IFCONFIG $iface plumb 
+    echo $?
+}
+
+function unplumb_interface()
+{
+    iface=$1
+    $IFCONFIG $iface unplumb 
+    echo $?
+}
+
+function assign_interface_ip()
+{
+    iface=$1
+    ip=$2
+    $IFCONFIG $iface $ip netmask 255.255.255.255
+    echo $?
+}
+
+function up_interface()
+{
+    iface=$1
+    $IFCONFIG $iface up
+    echo $?
+}
+
+function down_interface()
+{
+    iface=$1
+    $IFCONFIG $iface down
+    echo $?
+}
+
