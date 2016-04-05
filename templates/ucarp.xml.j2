@@ -32,13 +32,13 @@
         <exec_method
             type="method"
             name="start"
-	        exec="{{ net_ucarp_SmartOS_service_svc_file }}"
+	        exec="{{ net_ucarp_SmartOS_service_svc_file }} start"
             timeout_seconds="30">
         </exec_method>
         <exec_method
             type="method"
             name="stop"
-	        exec=":kill"
+	        exec="{{ net_ucarp_SmartOS_service_svc_file }} stop"
             timeout_seconds="60">
         </exec_method>
         <property_group name='ucarp' type='application'>

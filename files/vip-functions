@@ -9,6 +9,12 @@ function get_interface_status()
         echo 255
         exit
     fi
+    $IFCONFIG $iface | grep DUPLICATE >/dev/null 2>&1
+    if [ $? == 0 ]; then
+        # interface is duplicate
+        echo 254
+        exit
+    fi
     $IFCONFIG $iface | grep UP >/dev/null 2>&1
     if [ $? == 0 ]; then
         # interface is up
@@ -16,6 +22,7 @@ function get_interface_status()
     else
         echo 1
     fi
+    
 }
 
 function plumb_interface()
