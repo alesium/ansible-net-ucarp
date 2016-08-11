@@ -15,7 +15,7 @@ function get_interface_status()
         echo 254
         exit
     fi
-    $IFCONFIG $iface | grep UP >/dev/null 2>&1
+    $IFCONFIG $iface | grep "UP," >/dev/null 2>&1
     if [ $? == 0 ]; then
         # interface is up
         echo 0
