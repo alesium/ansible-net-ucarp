@@ -1,0 +1,12 @@
+net_ucarp_packages:
+        - ucarp
+net_ucarp_service_name: "pkgsrc/ucarp"
+net_ucarp_config_file_src: "ucarp.conf.j2"
+net_ucarp_config_file_dest: "/opt/local/etc/ucarp.conf"
+net_ucarp_exec_file: "/opt/local/sbin/ucarp"
+net_ucarp_vip_script_location: "/opt/local/libexec/ucarp"
+net_ucarp_vip_up_exec_file_src: "vip-up.sh"
+net_ucarp_vip_down_exec_file_src: "vip-down.sh"
+net_ucarp_SmartOS_service_smf_file: "/opt/local/lib/svc/manifest/ucarp.xml"
+net_ucarp_SmartOS_service_svc_file: "/opt/local/lib/svc/method/ucarp-svc"
+net_ucarp_SmartOS_service_bundle_name: "ucarp"
